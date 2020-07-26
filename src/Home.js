@@ -1,5 +1,4 @@
 import React from 'react';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
@@ -28,7 +27,6 @@ class Home extends React.Component {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
   return array;
 }
 
@@ -48,7 +46,8 @@ class Home extends React.Component {
     let result = null;
     (e.target.value === question.correct_answer) ? result = true : result = false;
     this.state.answeredQuestions++;
-    let newResults = this.state.results.concat(result);
+    let newResults = this.state.results;
+    newResults = newResults.concat(result);
     this.setState({
       results: newResults,
     });

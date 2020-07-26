@@ -2,7 +2,7 @@
   "name": "trivia",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://nleborgne.github.com/trivia",
+  "homepage": "https://nleborgne.github.io/trivia",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
