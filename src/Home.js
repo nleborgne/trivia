@@ -45,11 +45,12 @@ class Home extends React.Component {
   checkAnswer(e, question) {
     let result = null;
     (e.target.value === question.correct_answer) ? result = true : result = false;
-    this.state.answeredQuestions++;
     let newResults = this.state.results;
+    let alreadyAnswered = this.state.answeredQuestions;
     newResults = newResults.concat(result);
     this.setState({
       results: newResults,
+      answeredQuestions: alreadyAnswered + 1,
     });
   }
 
