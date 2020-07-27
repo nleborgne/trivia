@@ -3,19 +3,31 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import FormControl from 'react-bootstrap/FormControl';
-import './App.css';
-
+import Clock from './Clock';
 
 class Home extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       choicesDifficulty: ['Any','Easy','Medium','Hard'],
-      difficulty: '',
+      difficulty: 'any',
       questions: null,
       answeredQuestions: 0,
-      results:[]
+      answers: [],
+      results:[],
+      time: 0,
+      isRandomized: false,
     }
+  }
+
+  startTimer() {
+    this.timer = setInterval(() => this.setState({
+      time: this.state.time + 1
+    }), 1000)
+  }
+
+  stopTimer() {
+    clearInterval(this.timer);
   }
 
   shuffle(array) {
@@ -32,7 +44,7 @@ class Home extends React.Component {
 
   decodeHTML(text) {
     return (
-      text.replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&ldquo;/g,"“").replace(/&rdquo;/g,"”").replace(/&amp;/g,'&').replace(/&eacute;/g,'é')
+      text.replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&ldquo;/g,"“").replace(/&rdquo;/g,"”").replace(/&amp;/g,'&').replace(/&eacute;/g,'é').replace(/&rsquo;/g, "'").replace(/&ocirc/g, 'ô')
     )
   }
 
@@ -44,27 +56,32 @@ class Home extends React.Component {
 
   checkAnswer(e, question) {
     let result = null;
-    (e.target.value === question.correct_answer) ? result = true : result = false;
+    (this.decodeHTML(e.target.value) === this.decodeHTML(question.correct_answer)) ? result = true : result = false;
     let newResults = this.state.results;
     let alreadyAnswered = this.state.answeredQuestions;
+    let previousAnswers = this.state.answers;
     newResults = newResults.concat(result);
+    previousAnswers = previousAnswers.concat(e.target.value);
     this.setState({
       results: newResults,
       answeredQuestions: alreadyAnswered + 1,
+      answers: previousAnswers,
+      isRandomized: false,
     });
   }
 
   getQuestions() {
-    let difficulty;
-    (this.state.difficullty !== '') ? difficulty = '&difficulty='+this.state.difficulty : difficulty = '';
-    fetch('https://opentdb.com/api.php?amount=10&type=multiple'+difficulty)
+    let difficulty = '';
+    (this.state.difficulty === 'any') ? difficulty = '' : difficulty = '&difficulty='+this.state.difficulty ;
+    let url = 'https://opentdb.com/api.php?amount=10&type=multiple'+difficulty;
+    fetch(url)
     .then((response) => {
       response.json().then((data) => {
         this.setState({
           questions:data.results,
         });
       });
-    });
+    },    this.startTimer());
   }
 
   render() {
@@ -95,15 +112,23 @@ class Home extends React.Component {
       answers.push(<Button className="mr-3" variant="light" onClick={ (e) => this.checkAnswer(e, currentQuestion) } value={this.decodeHTML(answer)}>{this.decodeHTML(answer)}</Button>);
     }
     answers.push(<Button className="mr-3" variant="light" onClick={ (e) => this.checkAnswer(e, currentQuestion) } value={this.decodeHTML(currentQuestion.correct_answer)}>{this.decodeHTML(currentQuestion.correct_answer)}</Button>);
-    answers = this.shuffle(answers);
+    if(!this.state.isRandomized) {
+      answers = this.shuffle(answers);
+      this.setState({isRandomized:true,})
+    }
       return (
-        <div class="mt-5">
-          <h4 class="text-light text-center">Question : {this.state.answeredQuestions + 1} / 10 </h4>
+        <div class="mt-5 col-6 mx-auto">
+          <div class="row">
+            <h4 class="text-light float-left">Question : {this.state.answeredQuestions + 1} / 10 </h4>
+            <h4 class="text-light float-right ml-auto">Category : {this.decodeHTML(currentQuestion.category)}</h4>
+          </div>
           <h4 className="text-center text-light">{this.decodeHTML(currentQuestion.question)}</h4>
           <div className="mx-auto text-center mt-3">{answers}</div>
+          <Clock time={this.state.time} />
         </div>
       )
     } else {
+      this.stopTimer();
       let showResults = [];
       let correctAnswers = this.state.results.filter(x => x === true).length;
 
@@ -111,16 +136,17 @@ class Home extends React.Component {
         let questionTitle = this.decodeHTML(this.state.questions[i].question);
         if(this.state.results[i] === true) {
           let answer = this.decodeHTML(this.state.questions[i].correct_answer);
-          showResults.push(<div><h4 className="text-light">{questionTitle}</h4><p className="text-success">Correct</p><p className="text-light">Answer : {answer}</p></div>);
+          showResults.push(<div><h4 className="text-light">{questionTitle}</h4><p className="text-success">Correct</p><p className="text-light">Answer : {this.decodeHTML(answer)}</p></div>);
         } else {
           let answer = this.decodeHTML(this.state.questions[i].correct_answer);
-          showResults.push(<div><h4 className="text-light">{questionTitle}</h4><p className="text-danger">Incorrect</p><p className="text-light">Answer : {answer}</p></div>);
+          showResults.push(<div><h4 className="text-light">{questionTitle}</h4><p className="text-danger">Incorrect</p><p class="text-light">Your answer : {this.decodeHTML(this.state.answers[i])}</p><p className="text-light">Answer : {this.decodeHTML(answer)}</p></div>);
         }
       }
 
       return(
         <div className="mt-5 text-center">
           <h4 className="text-light mb-5">Score : {correctAnswers} / {this.state.questions.length}</h4>
+          <h4 className="text-light mb-5">Time : {this.state.time} seconds</h4>
           {showResults}
         </div>
       )
