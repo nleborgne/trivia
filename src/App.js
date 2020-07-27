@@ -1,6 +1,5 @@
 import React from 'react';
 import Home from './Home';
-import Clock from './Clock';
 import './App.css';
 
 class App extends React.Component {

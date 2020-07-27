@@ -94,7 +94,7 @@ class Home extends React.Component {
       <div className="App">
         <header className="App-header mt-5">
           <div className="text-center">
-            <FormGroup className="col-3 mx-auto mt-5">
+            <FormGroup className="col-sm-10 col-lg-3 mx-auto mt-5">
               <FormLabel className="text-light">Select difficulty</FormLabel>
               <FormControl as="select" onChange={ (e) => this.changeDifficulty(e)}>
                 {test}
@@ -109,15 +109,15 @@ class Home extends React.Component {
     let currentQuestion = this.state.questions[this.state.answeredQuestions];
     let answers = [];
     for (let answer of currentQuestion.incorrect_answers) {
-      answers.push(<Button className="mr-3" variant="light" onClick={ (e) => this.checkAnswer(e, currentQuestion) } value={this.decodeHTML(answer)}>{this.decodeHTML(answer)}</Button>);
+      answers.push(<Button className="mr-3 mb-3" variant="light" onClick={ (e) => this.checkAnswer(e, currentQuestion) } value={this.decodeHTML(answer)}>{this.decodeHTML(answer)}</Button>);
     }
-    answers.push(<Button className="mr-3" variant="light" onClick={ (e) => this.checkAnswer(e, currentQuestion) } value={this.decodeHTML(currentQuestion.correct_answer)}>{this.decodeHTML(currentQuestion.correct_answer)}</Button>);
+    answers.push(<Button className="mr-3 mb-3" variant="light" onClick={ (e) => this.checkAnswer(e, currentQuestion) } value={this.decodeHTML(currentQuestion.correct_answer)}>{this.decodeHTML(currentQuestion.correct_answer)}</Button>);
     if(!this.state.isRandomized) {
       answers = this.shuffle(answers);
       this.setState({isRandomized:true,})
     }
       return (
-        <div class="mt-5 col-6 mx-auto">
+        <div class="mt-5 col-sm-12 col-lg-6 mx-auto">
           <div class="row">
             <h4 class="text-light float-left">Question : {this.state.answeredQuestions + 1} / 10 </h4>
             <h4 class="text-light float-right ml-auto">Category : {this.decodeHTML(currentQuestion.category)}</h4>
