@@ -4,8 +4,8 @@ class Clock extends React.Component {
 
   render() {
     return (
-      <div>
-        <h3 className="text-light">Time : {this.props.time}</h3>
+      <div className="clock">
+        <p>{this.props.time}</p>
       </div>
     )
   }

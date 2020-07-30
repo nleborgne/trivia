@@ -1,25 +1,135 @@
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 body {
-  background-color: #282c34;
+background-color: white;
+font-family: 'Montserrat', sans-serif;
+background-image: linear-gradient(to right bottom, #b7f8db, #96e5d6, #79d1d1, #61bcca, #50a7c2);min-height:100vh;
+}
 
+h1 {
+  color: white;
+}
+
+.score {
+  font-size:2em;
+  color:lightgreen;
+}
+
+#container {
+    border-radius: 20px;
+    background-color:white;
+}
+
+.button {
+  background-image: linear-gradient(to right bottom, #b7f8db, #96e5d6, #79d1d1, #61bcca, #50a7c2);
+  border:0;
+  color:white;
+  font-size:1.1em;
+}
+
+form {
+  max-width: 250px;
+  position: relative;
+  margin: 50px auto 0;
+  font-size: 15px;
+}
+
+.radiobtn {
+  position: relative;
+  display: block;
+}
+.radiobtn label {
+  display: block;
+  background: #fff;
+  color: #333;
+  border-radius: 5px;
+  padding: 10px 20px;
+  border: 2px solid #50A7C2;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.radiobtn label:after, .radiobtn label:before {
+  content: "";
+  position: absolute;
+  right: 11px;
+  top: 11px;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px; 
+  background: #50A7C2;
+}
+.radiobtn label:before {
+  background: transparent;
+  transition: 0.1s width cubic-bezier(0.075, 0.82, 0.165, 1) 0s, 0.3s height cubic-bezier(0.075, 0.82, 0.165, 2) 0.1s;
+  z-index: 2;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: 13px;
+  background-position: center;
+  width: 0;
+  height: 0;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNS4zIDEzLjIiPiAgPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE0LjcuOGwtLjQtLjRhMS43IDEuNyAwIDAgMC0yLjMuMUw1LjIgOC4yIDMgNi40YTEuNyAxLjcgMCAwIDAtMi4zLjFMLjQgN2ExLjcgMS43IDAgMCAwIC4xIDIuM2wzLjggMy41YTEuNyAxLjcgMCAwIDAgMi40LS4xTDE1IDMuMWExLjcgMS43IDAgMCAwLS4yLTIuM3oiIGRhdGEtbmFtZT0iUGZhZCA0Ii8+PC9zdmc+);
+}
+
+.radiobtn input[type=radio] {
+  display: none;
+  position: absolute;
+  width: 100%;
+  appearance: none;
 }
 
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.radiobtn input[type=radio]:checked + label {
+  background-image: linear-gradient(to right bottom, #b7f8db, #96e5d6, #79d1d1, #61bcca, #50a7c2);
+  color:white;
+  /animation-name: blink;
+  animation-duration: 1s;
+  border-color: #B7F8DB;
+}
+.radiobtn input[type=radio]:checked + label:after {
+  background: #B7F8DB;
+}
+.radiobtn input[type=radio]:checked + label:before {
+  width: 20px;
+  height: 20px;
+}
+
+.clock {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: #fff;
+  line-height: 50px;
+  text-align: center;
+  background: #50A7C2;
+}
+
+
+@keyframes blink {
+  0% {
+    background-color: #fdcb77;
   }
-  to {
-    transform: rotate(360deg);
+  10% {
+    background-color: #fdcb77;
+  }
+  11% {
+    background-color: #fdd591;
+  }
+  29% {
+    background-color: #fdd591;
+  }
+  30% {
+    background-color: #fdcb77;
+  }
+  50% {
+    background-color: #fdd591;
+  }
+  45% {
+    background-color: #fdcb77;
+  }
+  50% {
+    background-color: #fdd591;
+  }
+  100% {
+    background-color: #fdcb77;
   }
 }
